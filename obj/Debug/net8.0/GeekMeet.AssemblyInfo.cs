@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GeekMeet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a423e1dc9c9cb9dbbce7abd4f54674d1fef7c243")]
 [assembly: System.Reflection.AssemblyProductAttribute("GeekMeet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GeekMeet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

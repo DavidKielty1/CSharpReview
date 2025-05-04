@@ -10,6 +10,8 @@ namespace GeekMeet.Models
 
         public required string PasswordHash { get; set; }
 
+        public string? City { get; set; }
+
         public DateTime CreatedAt { get; set; }
     }
 } 

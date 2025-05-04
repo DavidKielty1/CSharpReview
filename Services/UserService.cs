@@ -92,21 +92,21 @@ public class UserService(
         }
     }
 
-    public async Task<IEnumerable<UserDto>> SearchUsersAsync(string query)
+    public async Task<IEnumerable<UserDto>> SearchUsersAsync(UserSearchDto searchParams)
     {
         try
         {
-            var users = await userRepository.SearchAsync(query);
+            var users = await userRepository.SearchAsync(searchParams);
             return mapper.Map<IEnumerable<UserDto>>(users);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error searching users with query {Query}", query);
+            logger.LogError(ex, "Error searching users with parameters {@SearchParams}", searchParams);
             throw;
         }
     }
 
-    public async Task<(int totalUsers, DateTime lastUserCreated)> GetUserStatisticsAsync()
+    public async Task<(int totalUsers, DateTime? lastUserCreated)> GetUserStatisticsAsync()
     {
         try
         {

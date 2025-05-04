@@ -1,3 +1,4 @@
+using GeekMeet.DTOs;
 using GeekMeet.Models;
 
 namespace GeekMeet.Interfaces
@@ -9,7 +10,7 @@ namespace GeekMeet.Interfaces
         Task<User> CreateAsync(User user);
         Task<bool> UpdateAsync(User user);
         Task<bool> DeleteAsync(int id);
-        Task<IEnumerable<User>> SearchAsync(string query);
-        Task<(int totalUsers, DateTime lastUserCreated)> GetStatisticsAsync();
+        Task<IEnumerable<User>> SearchAsync(UserSearchDto searchParams);
+        Task<(int totalUsers, DateTime? lastUserCreated)> GetStatisticsAsync();
     }
 } 

@@ -9,7 +9,7 @@ namespace GeekMeet.Services
         Task<UserDto> CreateUserAsync(CreateUserDto userDto);
         Task<bool> UpdateUserAsync(int id, UpdateUserDto userDto);
         Task<bool> DeleteUserAsync(int id);
-        Task<IEnumerable<UserDto>> SearchUsersAsync(string query);
-        Task<(int totalUsers, DateTime lastUserCreated)> GetUserStatisticsAsync();
+        Task<IEnumerable<UserDto>> SearchUsersAsync(UserSearchDto searchParams);
+        Task<(int totalUsers, DateTime? lastUserCreated)> GetUserStatisticsAsync();
     }
 } 

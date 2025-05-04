@@ -61,9 +61,9 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("search")]
-    public async Task<ActionResult<IEnumerable<UserDto>>> SearchUsers([FromQuery] string query)
+    public async Task<ActionResult<IEnumerable<UserDto>>> SearchUsers([FromQuery] UserSearchDto searchParams)
     {
-        var users = await userService.SearchUsersAsync(query);
+        var users = await userService.SearchUsersAsync(searchParams);
         return Ok(users);
     }
 
@@ -74,7 +74,7 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(new
         {
             TotalUsers = stats.totalUsers,
-            LastUserCreated = stats.lastUserCreated
+            LastUserCreated = stats.lastUserCreated?.ToString("o")
         });
     }
 } 
