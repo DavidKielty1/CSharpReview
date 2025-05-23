@@ -10,7 +10,7 @@ namespace GeekMeet.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-    private readonly string _apiKey = "1234567890abcdef"; // Hardcoded API key
+    private readonly string _apiKey = "1234567890abcdef"; // Hardcoded API key.
 
     public UserController(ApplicationDbContext context)
     {
