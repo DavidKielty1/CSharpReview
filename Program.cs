@@ -73,6 +73,7 @@ builder.Services.AddSwaggerGen(c =>
 // Register services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserParallelService, UserParallelService>();
 
 var app = builder.Build();
 

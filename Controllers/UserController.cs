@@ -1,5 +1,5 @@
 using GeekMeet.DTOs;
-using GeekMeet.Services;
+using GeekMeet.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,13 +68,13 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("statistics")]
-    public async Task<ActionResult<object>> GetUserStatistics()
+    public async Task<ActionResult<UserStatisticsDto>> GetUserStatistics()
     {
         var stats = await userService.GetUserStatisticsAsync();
-        return Ok(new
+        return Ok(new UserStatisticsDto
         {
             TotalUsers = stats.totalUsers,
-            LastUserCreated = stats.lastUserCreated?.ToString("o")
+            LastUserCreated = stats.lastUserCreated
         });
     }
 } 
