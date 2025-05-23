@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using GeekMeet.DTOs;
 using GeekMeet.Interfaces;
 using GeekMeet.Models;
-using Microsoft.Extensions.Logging;
 
 namespace GeekMeet.Services;
 
@@ -17,7 +16,7 @@ public class UserParallelService(
         try
         {
             // Using Parallel LINQ (PLINQ) for parallel processing
-            var processedUsers = users.AsParallel()
+            var tasks = users.AsParallel()
                 .WithDegreeOfParallelism(Environment.ProcessorCount)
                 .Select(async user =>
                 {
@@ -32,10 +31,9 @@ public class UserParallelService(
                     {
                         _semaphore.Release();
                     }
-                })
-                .Select(t => t.Result)
-                .ToList();
+                });
 
+            var processedUsers = await Task.WhenAll(tasks);
             return processedUsers;
         }
         catch (Exception ex)
