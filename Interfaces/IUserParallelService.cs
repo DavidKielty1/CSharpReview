@@ -1,11 +1,14 @@
-using GeekMeet.DTOs;
+using GeekMeet.Services.Metrics;
+using GeekMeet.Services.Search;
+using GeekMeet.Services.Statistics;
+using GeekMeet.Services.UserProcessing;
 
 namespace GeekMeet.Interfaces;
 
 public interface IUserParallelService
 {
-    Task<IEnumerable<UserDto>> ProcessUsersInParallelAsync(IEnumerable<UserDto> users);
-    Task<Dictionary<string, int>> GetUserStatisticsByCityAsync();
-    Task<IEnumerable<UserDto>> GetUsersWithParallelSearchAsync(UserSearchDto searchParams);
-    Task<Dictionary<string, double>> CalculateUserMetricsAsync();
+    UserParallelProcessor UserProcessor { get; }
+    CityStatisticsService CityStatsService { get; }
+    UserSearchService SearchService { get; }
+    UserMetricsService MetricsService { get; }
 } 

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geekmeet-api
+  namespace: geekmeet
+spec:
+  selector:
+    matchLabels:
+      app: geekmeet-api
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: geekmeet-api
+    spec:
+      containers:
+      - name: geekmeet-api
+        image: geekmeet-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ConnectionStrings__DefaultConnection
+          value: "Server=sqlserver;Database=GeekMeet;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+        - name: ConnectionStrings__Redis
+          value: "redis:6379"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: geekmeet-api
+  namespace: geekmeet
+spec:
+  selector:
+    app: geekmeet-api
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer 

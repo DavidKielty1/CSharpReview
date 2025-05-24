@@ -1,10 +1,8 @@
 using System;
 
-namespace GeekMeet.DTOs
-{
-    public class UserStatisticsDto
-    {
-        public int TotalUsers { get; init; }
-        public DateTime? LastUserCreated { get; init; }
-    }
-} 
+namespace GeekMeet.DTOs;
+
+public record UserStatisticsDto(
+    int TotalUsers,
+    DateTime? LastUserCreated
+); 

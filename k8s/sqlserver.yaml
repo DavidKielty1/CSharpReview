@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqlserver
+  namespace: geekmeet
+spec:
+  selector:
+    matchLabels:
+      app: sqlserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sqlserver
+    spec:
+      containers:
+      - name: sqlserver
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: sqlserver-secret
+              key: SA_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver
+  namespace: geekmeet
+spec:
+  selector:
+    app: sqlserver
+  ports:
+  - port: 1433
+    targetPort: 1433
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sqlserver-secret
+  namespace: geekmeet
+type: Opaque
+data:
+  SA_PASSWORD: WW91clN0cm9uZyFQYXNzdzByZA== # Base64 encoded "YourStrong!Passw0rd" 

@@ -16,28 +16,28 @@ public class UserParallelController(
     public async Task<ActionResult<IEnumerable<UserDto>>> ProcessUsersInParallel()
     {
         var users = await userService.GetAllUsersAsync();
-        var processedUsers = await userParallelService.ProcessUsersInParallelAsync(users);
+        var processedUsers = await userParallelService.UserProcessor.ProcessUsersAsync(users);
         return Ok(processedUsers);
     }
 
     [HttpGet("statistics/city")]
     public async Task<ActionResult<Dictionary<string, int>>> GetUserStatisticsByCity()
     {
-        var statistics = await userParallelService.GetUserStatisticsByCityAsync();
+        var statistics = await userParallelService.CityStatsService.GetStatisticsAsync();
         return Ok(statistics);
     }
 
     [HttpGet("search/parallel")]
     public async Task<ActionResult<IEnumerable<UserDto>>> SearchUsersParallel([FromQuery] UserSearchDto searchParams)
     {
-        var users = await userParallelService.GetUsersWithParallelSearchAsync(searchParams);
+        var users = await userParallelService.SearchService.SearchUsersAsync(searchParams);
         return Ok(users);
     }
 
     [HttpGet("metrics")]
     public async Task<ActionResult<Dictionary<string, double>>> GetUserMetrics()
     {
-        var metrics = await userParallelService.CalculateUserMetricsAsync();
+        var metrics = await userParallelService.MetricsService.CalculateMetricsAsync();
         return Ok(metrics);
     }
 } 

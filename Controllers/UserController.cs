@@ -72,9 +72,9 @@ public class UserController(IUserService userService) : ControllerBase
     {
         var stats = await userService.GetUserStatisticsAsync();
         return Ok(new UserStatisticsDto
-        {
-            TotalUsers = stats.totalUsers,
-            LastUserCreated = stats.lastUserCreated
-        });
+        (
+            stats.totalUsers,
+            stats.lastUserCreated
+        ));
     }
 } 
