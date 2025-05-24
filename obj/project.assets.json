@@ -3234,11 +3234,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj",
-      "projectName": "GeekMeet",
-      "projectPath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj",
+      "projectUniqueName": "E:\\tech_tests\\csharp\\csharp-review\\UserDistributed\\UserDistributed.csproj",
+      "projectName": "UserDistributed",
+      "projectPath": "E:\\tech_tests\\csharp\\csharp-review\\UserDistributed\\UserDistributed.csproj",
       "packagesPath": "C:\\Users\\david\\.nuget\\packages\\",
-      "outputPath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\obj\\",
+      "outputPath": "E:\\tech_tests\\csharp\\csharp-review\\UserDistributed\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\david\\AppData\\Roaming\\NuGet\\NuGet.Config"

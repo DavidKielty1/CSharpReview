@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: geekmeet-api
-  namespace: geekmeet
+  name: userdistributed-api
+  namespace: userdistributed
 spec:
   selector:
     matchLabels:
-      app: geekmeet-api
+      app: userdistributed-api
   replicas: 3
   template:
     metadata:
       labels:
-        app: geekmeet-api
+        app: userdistributed-api
     spec:
       containers:
-      - name: geekmeet-api
-        image: geekmeet-api:latest
+      - name: userdistributed-api
+        image: userdistributed-api:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
@@ -23,7 +23,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
         - name: ConnectionStrings__DefaultConnection
-          value: "Server=sqlserver;Database=GeekMeet;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+          value: "Server=sqlserver;Database=UserDistributed;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
         - name: ConnectionStrings__Redis
           value: "redis:6379"
         resources:
@@ -49,11 +49,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: geekmeet-api
-  namespace: geekmeet
+  name: userdistributed-api
+  namespace: userdistributed
 spec:
   selector:
-    app: geekmeet-api
+    app: userdistributed-api
   ports:
   - port: 80
     targetPort: 80

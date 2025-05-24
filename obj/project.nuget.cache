@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "la2Tm2Btcvk=",
+  "dgSpecHash": "5JM1A0ge2QE=",
   "success": true,
-  "projectFilePath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj",
+  "projectFilePath": "E:\\tech_tests\\csharp\\csharp-review\\UserDistributed\\UserDistributed.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\david\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\david\\.nuget\\packages\\automapper.collection\\9.0.0\\automapper.collection.9.0.0.nupkg.sha512",
