@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj": {}
+    "E:\\tech_tests\\csharp\\csharp-review\\code-review\\UserDistributed.csproj": {}
   },
   "projects": {
-    "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj": {
+    "E:\\tech_tests\\csharp\\csharp-review\\code-review\\UserDistributed.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj",
-        "projectName": "GeekMeet",
-        "projectPath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\GeekMeet.csproj",
+        "projectUniqueName": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\UserDistributed.csproj",
+        "projectName": "UserDistributed",
+        "projectPath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\UserDistributed.csproj",
         "packagesPath": "C:\\Users\\david\\.nuget\\packages\\",
         "outputPath": "E:\\tech_tests\\csharp\\csharp-review\\code-review\\obj\\",
         "projectStyle": "PackageReference",

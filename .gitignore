@@ -1,1 +1,48 @@
+# Build results
+bin/
+obj/
+
+# VS Code settings
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+
+# Dotnet publish artifacts
+*.dbmdl
+*.pdb
+*.cache
+*.log
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Docker
+**/Dockerfile
+**/docker-compose*.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+crash.log
+*.tfvars
+
+# SQL Server
+*.mdf
+*.ldf
+
+# Others
+*.vspscc
+*.vssscc
+*.sln.docstates
+
+# Static web assets
+**/staticwebassets/
+
+# Rider/JetBrains
+.idea/
+
+# Ignore selfreadme.md if you want
 selfreadme.md

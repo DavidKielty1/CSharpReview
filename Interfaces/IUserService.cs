@@ -1,6 +1,6 @@
-using GeekMeet.DTOs;
+using UserDistributed.DTOs;
 
-namespace GeekMeet.Interfaces;
+namespace UserDistributed.Interfaces;
 
 public interface IUserService
 {
@@ -11,4 +11,4 @@ public interface IUserService
     Task<bool> DeleteUserAsync(int id);
     Task<IEnumerable<UserDto>> SearchUsersAsync(UserSearchDto searchParams);
     Task<(int totalUsers, DateTime? lastUserCreated)> GetUserStatisticsAsync();
-} 
+}

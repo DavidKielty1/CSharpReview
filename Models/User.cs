@@ -1,4 +1,4 @@
-namespace GeekMeet.Models
+namespace UserDistributed.Models
 {
     public class User
     {
@@ -14,4 +14,4 @@ namespace GeekMeet.Models
 
         public DateTime CreatedAt { get; set; }
     }
-} 
+}

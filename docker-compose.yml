@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -12,8 +12,10 @@ services:
       - ConnectionStrings__DefaultConnection=Server=db;Database=UserDistributed;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - ConnectionStrings__Redis=redis:6379
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -24,6 +26,13 @@ services:
       - "1433:1433"
     volumes:
       - sqldata:/var/opt/mssql
+    healthcheck:
+      test: |
+        echo 'SELECT 1' | /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong!Passw0rd -C
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
 
   redis:
     image: redis:latest
@@ -31,7 +40,12 @@ services:
       - "6379:6379"
     volumes:
       - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   sqldata:
-  redisdata: 
+  redisdata:

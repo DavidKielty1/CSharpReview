@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GeekMeet.DTOs;
+namespace UserDistributed.DTOs;
 
 public record UserDto(
     int Id,
@@ -34,4 +34,4 @@ public record UpdateUserDto(
 
     [StringLength(100, MinimumLength = 8)]
     string? Password = null
-); 
+);

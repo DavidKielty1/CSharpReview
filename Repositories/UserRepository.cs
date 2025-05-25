@@ -1,10 +1,10 @@
-using GeekMeet.Data;
-using GeekMeet.DTOs;
-using GeekMeet.Interfaces;
-using GeekMeet.Models;
+using UserDistributed.Data;
+using UserDistributed.DTOs;
+using UserDistributed.Interfaces;
+using UserDistributed.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeekMeet.Repositories;
+namespace UserDistributed.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {
@@ -35,7 +35,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
     {
         var user = await context.Users.FindAsync(id);
         if (user == null) return false;
-        
+
         context.Users.Remove(user);
         return await context.SaveChangesAsync() > 0;
     }
@@ -57,4 +57,4 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         var lastUserCreated = await context.Users.MaxAsync(u => (DateTime?)u.CreatedAt);
         return (totalUsers, lastUserCreated);
     }
-} 
+}

@@ -1,8 +1,8 @@
-using GeekMeet.DTOs;
-using GeekMeet.Interfaces;
-using GeekMeet.Services.Cache;
+using UserDistributed.DTOs;
+using UserDistributed.Interfaces;
+using UserDistributed.Services.Cache;
 
-namespace GeekMeet.Services.Search;
+namespace UserDistributed.Services.Search;
 
 public class UserSearchService(
     IUserRepository userRepository,
@@ -13,7 +13,7 @@ public class UserSearchService(
     public async Task<IEnumerable<UserDto>> SearchUsersAsync(UserSearchDto searchParams)
     {
         var cacheKey = RedisCacheKeys.UserSearch(searchParams);
-        
+
         // Try to get from Redis cache first
         var cachedResults = await redisService.GetAsync<IEnumerable<UserDto>>(cacheKey);
         if (cachedResults != null)
@@ -23,10 +23,10 @@ public class UserSearchService(
         }
 
         var users = await userRepository.GetAllAsync();
-        
+
         // Using Parallel.ForEach for concurrent filtering
         var filteredUsers = new ConcurrentBag<UserDto>();
-        
+
         await Parallel.ForEachAsync(users, async (user, token) =>
         {
             if (await searchCriteriaMatcher.MatchesAsync(user, searchParams))
@@ -41,11 +41,11 @@ public class UserSearchService(
         });
 
         var results = filteredUsers.ToList();
-        
+
         // Cache the results
         await redisService.SetAsync(cacheKey, results, TimeSpan.FromMinutes(15));
         logger.LogInformation("Cached search results for key: {Key}", cacheKey);
-        
+
         return results;
     }
-} 
+}

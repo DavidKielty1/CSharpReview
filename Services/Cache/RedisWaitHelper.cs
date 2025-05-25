@@ -1,4 +1,4 @@
-namespace GeekMeet.Services.Cache;
+namespace UserDistributed.Services.Cache;
 
 public class RedisWaitHelper(IRedisService redisService)
 {
@@ -7,7 +7,7 @@ public class RedisWaitHelper(IRedisService redisService)
     public async Task<T?> WaitForResultAsync<T>(string resultsKey)
     {
         var startTime = DateTime.UtcNow;
-        
+
         while (DateTime.UtcNow - startTime < _maxWaitTime)
         {
             var results = await redisService.GetAsync<T>(resultsKey);
@@ -17,7 +17,7 @@ public class RedisWaitHelper(IRedisService redisService)
             }
             await Task.Delay(1000);
         }
-        
+
         return default;
     }
-} 
+}

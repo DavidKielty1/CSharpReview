@@ -1,7 +1,7 @@
-using GeekMeet.DTOs;
-using GeekMeet.Models;
+using UserDistributed.DTOs;
+using UserDistributed.Models;
 
-namespace GeekMeet.Interfaces
+namespace UserDistributed.Interfaces
 {
     public interface IUserRepository
     {
@@ -13,4 +13,4 @@ namespace GeekMeet.Interfaces
         Task<IEnumerable<User>> SearchAsync(UserSearchDto searchParams);
         Task<(int totalUsers, DateTime? lastUserCreated)> GetStatisticsAsync();
     }
-} 
+}

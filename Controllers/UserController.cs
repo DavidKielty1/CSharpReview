@@ -1,9 +1,9 @@
-using GeekMeet.DTOs;
-using GeekMeet.Interfaces;
+using UserDistributed.DTOs;
+using UserDistributed.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeekMeet.Controllers;
+namespace UserDistributed.Controllers;
 
 [Authorize]
 [ApiController]
@@ -77,4 +77,4 @@ public class UserController(IUserService userService) : ControllerBase
             stats.lastUserCreated
         ));
     }
-} 
+}

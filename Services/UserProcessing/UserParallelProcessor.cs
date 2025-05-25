@@ -1,7 +1,7 @@
-using GeekMeet.DTOs;
-using GeekMeet.Services.Cache;
+using UserDistributed.DTOs;
+using UserDistributed.Services.Cache;
 
-namespace GeekMeet.Services.UserProcessing;
+namespace UserDistributed.Services.UserProcessing;
 
 public class UserParallelProcessor(IRedisService redisService, RedisWaitHelper redisWaitHelper)
 {
@@ -11,7 +11,7 @@ public class UserParallelProcessor(IRedisService redisService, RedisWaitHelper r
     {
         var processingKey = RedisCacheKeys.Processing;
         var resultsKey = RedisCacheKeys.ProcessedResults;
-        
+
         // Check if processing is already in progress
         var isProcessing = await redisService.ExistsAsync(processingKey);
         if (isProcessing)
@@ -25,7 +25,7 @@ public class UserParallelProcessor(IRedisService redisService, RedisWaitHelper r
 
         // Mark processing as started
         await redisService.SetAsync(processingKey, true, TimeSpan.FromMinutes(5));
-        
+
         // Using Parallel LINQ (PLINQ) for parallel processing
         var tasks = users.AsParallel()
             .WithDegreeOfParallelism(Environment.ProcessorCount)
@@ -44,16 +44,16 @@ public class UserParallelProcessor(IRedisService redisService, RedisWaitHelper r
 
                     // Process user
                     await Task.Delay(100); // Simulate processing
-                    
+
                     // Store individual result
                     await redisService.SetAsync(userKey, user, TimeSpan.FromHours(1));
-                    
+
                     // Increment processed counter
                     var currentCount = await redisService.GetAsync<int?>(RedisCacheKeys.ProcessedCount);
-                    await redisService.SetAsync(RedisCacheKeys.ProcessedCount, 
+                    await redisService.SetAsync(RedisCacheKeys.ProcessedCount,
                         (currentCount ?? 0) + 1,
                         TimeSpan.FromHours(1));
-                    
+
                     return user;
                 }
                 finally
@@ -63,13 +63,13 @@ public class UserParallelProcessor(IRedisService redisService, RedisWaitHelper r
             });
 
         var processedUsers = await Task.WhenAll(tasks);
-        
+
         // Store final results
         await redisService.SetAsync(resultsKey, processedUsers, TimeSpan.FromHours(1));
-        
+
         // Clear processing flag
         await redisService.RemoveAsync(processingKey);
-        
+
         return processedUsers;
     }
-} 
+}

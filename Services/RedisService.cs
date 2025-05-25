@@ -1,7 +1,7 @@
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace GeekMeet.Services;
+namespace UserDistributed.Services;
 
 public interface IRedisService
 {
@@ -9,6 +9,7 @@ public interface IRedisService
     Task SetAsync<T>(string key, T value, TimeSpan? expiry = null);
     Task RemoveAsync(string key);
     Task<bool> ExistsAsync(string key);
+    Task<IDisposable> AcquireLockAsync(string key, TimeSpan timeout);
 }
 
 public class RedisService(IConnectionMultiplexer redis, ILogger<RedisService> logger) : IRedisService
@@ -69,4 +70,43 @@ public class RedisService(IConnectionMultiplexer redis, ILogger<RedisService> lo
             return false;
         }
     }
-} 
+
+    public async Task<IDisposable> AcquireLockAsync(string key, TimeSpan timeout)
+    {
+        var lockKey = $"lock:{key}";
+        var token = Guid.NewGuid().ToString();
+        var expiry = timeout;
+
+        var acquired = await _db.StringSetAsync(lockKey, token, expiry, When.NotExists);
+        if (!acquired)
+        {
+            throw new TimeoutException($"Could not acquire lock for key: {key}");
+        }
+
+        return new AsyncLock(lockKey, token, _db);
+    }
+
+    private class AsyncLock : IDisposable
+    {
+        private readonly string _key;
+        private readonly string _token;
+        private readonly IDatabase _db;
+        private bool _disposed;
+
+        public AsyncLock(string key, string token, IDatabase db)
+        {
+            _key = key;
+            _token = token;
+            _db = db;
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _db.KeyDelete(_key);
+                _disposed = true;
+            }
+        }
+    }
+}

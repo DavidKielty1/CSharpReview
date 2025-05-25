@@ -1,10 +1,10 @@
-using GeekMeet.Interfaces;
-using GeekMeet.Services.Metrics;
-using GeekMeet.Services.Search;
-using GeekMeet.Services.Statistics;
-using GeekMeet.Services.UserProcessing;
+using UserDistributed.Interfaces;
+using UserDistributed.Services.Metrics;
+using UserDistributed.Services.Search;
+using UserDistributed.Services.Statistics;
+using UserDistributed.Services.UserProcessing;
 
-namespace GeekMeet.Services;
+namespace UserDistributed.Services;
 
 public class UserParallelServiceCollection : IUserParallelService
 {
@@ -24,4 +24,4 @@ public class UserParallelServiceCollection : IUserParallelService
         SearchService = searchService;
         MetricsService = metricsService;
     }
-} 
+}

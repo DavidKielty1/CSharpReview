@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using GeekMeet.Data;
-using GeekMeet.Models;
+using UserDistributed.Data;
+using UserDistributed.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeekMeet.API.Controllers;
+namespace UserDistributed.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -124,8 +124,8 @@ public class UserController : ControllerBase
         {
             // Anti-pattern: Client-side filtering
             var allUsers = _context.Users.ToList();
-            var filteredUsers = allUsers.Where(u => 
-                u.Name.Contains(query) || 
+            var filteredUsers = allUsers.Where(u =>
+                u.Name.Contains(query) ||
                 u.Email.Contains(query)
             ).ToList();
             return Ok(filteredUsers);
@@ -144,7 +144,7 @@ public class UserController : ControllerBase
             // Anti-pattern: Multiple separate queries
             var totalUsers = _context.Users.Count();
             var lastUserCreated = _context.Users.Max(u => u.CreatedAt);
-            
+
             return Ok(new { TotalUsers = totalUsers, LastUserCreated = lastUserCreated });
         }
         catch (Exception ex)

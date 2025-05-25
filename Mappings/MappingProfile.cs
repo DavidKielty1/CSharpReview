@@ -1,8 +1,8 @@
 using AutoMapper;
-using GeekMeet.DTOs;
-using GeekMeet.Models;
+using UserDistributed.DTOs;
+using UserDistributed.Models;
 
-namespace GeekMeet.Mappings;
+namespace UserDistributed.Mappings;
 
 public class MappingProfile : Profile
 {
@@ -16,4 +16,4 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
-} 
+}

@@ -1,11 +1,11 @@
 using System.Collections.Concurrent;
-using GeekMeet.Interfaces;
-using GeekMeet.Models;
-using GeekMeet.Services.Cache;
-using GeekMeet.Services.Metrics.Calculations;
-using GeekMeet.Services.Metrics.Models;
+using UserDistributed.Interfaces;
+using UserDistributed.Models;
+using UserDistributed.Services.Cache;
+using UserDistributed.Services.Metrics.Calculations;
+using UserDistributed.Services.Metrics.Models;
 
-namespace GeekMeet.Services.Metrics;
+namespace UserDistributed.Services.Metrics;
 
 public class UserMetricsService(
     IUserRepository userRepository,
@@ -20,7 +20,7 @@ public class UserMetricsService(
     public async Task<Dictionary<string, UserMetrics>> CalculateMetricsAsync()
     {
         var cacheKey = RedisCacheKeys.UserMetricsCache;
-        
+
         // Try to get from Redis cache first
         var cachedMetrics = await redisService.GetAsync<Dictionary<string, UserMetrics>>(cacheKey);
         if (cachedMetrics != null)
@@ -49,7 +49,7 @@ public class UserMetricsService(
 
                 // Simulate some complex calculations
                 await Task.Delay(50);
-                
+
                 // Calculate metrics using the model
                 var userMetrics = new UserMetrics
                 {
@@ -62,7 +62,7 @@ public class UserMetricsService(
 
                 // Cache individual user metrics
                 await redisService.SetAsync(userMetricsKey, userMetrics, TimeSpan.FromHours(1));
-                
+
                 // Add to the main metrics dictionary
                 metrics.TryAdd($"user_{user.Id}", userMetrics);
             }
@@ -73,11 +73,11 @@ public class UserMetricsService(
         });
 
         var result = metrics.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        
+
         // Cache the complete metrics
         await redisService.SetAsync(cacheKey, result, TimeSpan.FromHours(1));
         logger.LogInformation("Cached metrics for key: {Key}", cacheKey);
-        
+
         return result;
     }
-} 
+}

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeekMeet.Controllers;
+namespace UserDistributed.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -11,4 +11,4 @@ public class HealthController : ControllerBase
     {
         return Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow });
     }
-} 
+}

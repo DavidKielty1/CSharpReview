@@ -1,7 +1,7 @@
 using System.Text.Json;
-using GeekMeet.DTOs;
+using UserDistributed.DTOs;
 
-namespace GeekMeet.Services.Cache;
+namespace UserDistributed.Services.Cache;
 
 public static class RedisCacheKeys
 {
@@ -15,4 +15,4 @@ public static class RedisCacheKeys
     public static string StatsResults => "stats_results";
     public static string ProcessedCount => "processed_count";
     public static string UserMetricsCache => "user_metrics";
-} 
+}

@@ -1,69 +1,52 @@
 using System.Collections.Concurrent;
-using GeekMeet.Interfaces;
-using GeekMeet.Models;
-using GeekMeet.Services.Cache;
+using UserDistributed.Interfaces;
+using UserDistributed.Models;
+using UserDistributed.Services.Cache;
+using Microsoft.Extensions.Logging;
 
-namespace GeekMeet.Services.Statistics;
+namespace UserDistributed.Services.Statistics;
 
-public class CityStatisticsService
+public class CityStatisticsService(
+    IUserRepository userRepository,
+    IRedisService redisService,
+    ILogger<CityStatisticsService> logger)
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IRedisService _redisService;
-    private readonly RedisWaitHelper _redisWaitHelper;
-
-    public CityStatisticsService(
-        IUserRepository userRepository,
-        IRedisService redisService,
-        RedisWaitHelper redisWaitHelper)
-    {
-        _userRepository = userRepository;
-        _redisService = redisService;
-        _redisWaitHelper = redisWaitHelper;
-    }
-
     public async Task<Dictionary<string, int>> GetStatisticsAsync()
     {
         var processingKey = RedisCacheKeys.StatsProcessing;
         var resultsKey = RedisCacheKeys.StatsResults;
-        
-        // Check if processing is already in progress
-        var isProcessing = await _redisService.ExistsAsync(processingKey);
-        if (isProcessing)
+
+        // Try to get cached results first
+        var cachedResults = await redisService.GetAsync<Dictionary<string, int>>(resultsKey);
+        if (cachedResults != null)
         {
-            var statsResults = await _redisWaitHelper.WaitForResultAsync<Dictionary<string, int>>(resultsKey);
-            if (statsResults != null)
-            {
-                return statsResults;
-            }
+            logger.LogInformation("Returning cached statistics");
+            return cachedResults;
         }
 
-        // Mark processing as started
-        await _redisService.SetAsync(processingKey, true, TimeSpan.FromMinutes(5));
-        
-        var users = await _userRepository.GetAllAsync();
-        var cityStats = new ConcurrentDictionary<string, int>();
-        
-        // Process cities in parallel
-        await Parallel.ForEachAsync(users, async (user, token) =>
+        // Use distributed lock to prevent multiple instances from processing simultaneously
+        using (await redisService.AcquireLockAsync(processingKey, TimeSpan.FromMinutes(5)))
         {
-            var city = user.City ?? "Unknown";
-            
-            // Use Redis to coordinate updates
-            var cityKey = RedisCacheKeys.CityStats(city);
-            var currentCityCount = await _redisService.GetAsync<int?>(cityKey);
-            await _redisService.SetAsync(cityKey, (currentCityCount ?? 0) + 1, TimeSpan.FromHours(1));
-            
-            cityStats.AddOrUpdate(city, 1, (_, count) => count + 1);
-        });
+            var users = await userRepository.GetAllAsync();
+            var cityStats = new ConcurrentDictionary<string, int>();
 
-        var results = cityStats.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        
-        // Store final results
-        await _redisService.SetAsync(resultsKey, results, TimeSpan.FromHours(1));
-        
-        // Clear processing flag
-        await _redisService.RemoveAsync(processingKey);
-        
-        return results;
+            // Process cities in parallel with a degree of parallelism limit
+            var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 3 };
+
+            await Parallel.ForEachAsync(users, parallelOptions, (user, token) =>
+            {
+                var city = user.City ?? "Unknown";
+                cityStats.AddOrUpdate(city, 1, (_, count) => count + 1);
+                return ValueTask.CompletedTask;
+            });
+
+            var results = cityStats.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            // Cache the results
+            await redisService.SetAsync(resultsKey, results, TimeSpan.FromHours(1));
+            logger.LogInformation("Updated and cached statistics");
+
+            return results;
+        }
     }
-} 
+}

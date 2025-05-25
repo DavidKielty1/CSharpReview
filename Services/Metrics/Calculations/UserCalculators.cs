@@ -1,6 +1,6 @@
-using GeekMeet.Models;
+using UserDistributed.Models;
 
-namespace GeekMeet.Services.Metrics.Calculations;
+namespace UserDistributed.Services.Metrics.Calculations;
 
 public class ActivityScoreCalculator
 {
@@ -15,7 +15,7 @@ public class ActivityScoreCalculator
             "chicago" => 10.0,
             _ => 5.0
         };
-        
+
         return baseScore + cityBonus - (daysSinceCreation * 0.5);
     }
 }
@@ -27,7 +27,7 @@ public class EngagementRateCalculator
         var baseRate = 0.5;
         var emailFactor = user.Email.Contains("@example.com") ? 0.2 : 0.1;
         var cityFactor = user.City != null ? 0.3 : 0.1;
-        
+
         return baseRate + emailFactor + cityFactor;
     }
 }
@@ -39,7 +39,7 @@ public class PerformanceIndexCalculator
         var baseIndex = 1.0;
         var nameLengthFactor = user.Name.Length * 0.05;
         var cityFactor = user.City?.Length * 0.02 ?? 0;
-        
+
         return baseIndex + nameLengthFactor + cityFactor;
     }
-} 
+}

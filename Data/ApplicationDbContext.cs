@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using GeekMeet.Models;
+using UserDistributed.Models;
 
-namespace GeekMeet.Data
+namespace UserDistributed.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -11,4 +11,4 @@ namespace GeekMeet.Data
 
         public DbSet<User> Users { get; set; }
     }
-} 
+}

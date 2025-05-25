@@ -1,4 +1,4 @@
-namespace GeekMeet.Services.Metrics.Models;
+namespace UserDistributed.Services.Metrics.Models;
 
 public class UserMetrics
 {
@@ -7,4 +7,4 @@ public class UserMetrics
     public double EngagementRate { get; set; }
     public double PerformanceIndex { get; set; }
     public DateTime CalculatedAt { get; set; }
-} 
+}

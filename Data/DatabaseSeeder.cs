@@ -1,7 +1,7 @@
-using GeekMeet.Models;
+using UserDistributed.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeekMeet.Data;
+namespace UserDistributed.Data;
 
 public static class DatabaseSeeder
 {
@@ -57,4 +57,4 @@ public static class DatabaseSeeder
             await context.SaveChangesAsync();
         }
     }
-} 
+}

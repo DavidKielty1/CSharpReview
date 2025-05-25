@@ -1,9 +1,9 @@
-using GeekMeet.DTOs;
-using GeekMeet.Interfaces;
+using UserDistributed.DTOs;
+using UserDistributed.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeekMeet.Controllers;
+namespace UserDistributed.Controllers;
 
 [Authorize]
 [ApiController]
@@ -40,4 +40,4 @@ public class UserParallelController(
         var metrics = await userParallelService.MetricsService.CalculateMetricsAsync();
         return Ok(metrics);
     }
-} 
+}

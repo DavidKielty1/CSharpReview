@@ -1,9 +1,9 @@
-using GeekMeet.Services.Metrics;
-using GeekMeet.Services.Search;
-using GeekMeet.Services.Statistics;
-using GeekMeet.Services.UserProcessing;
+using UserDistributed.Services.Metrics;
+using UserDistributed.Services.Search;
+using UserDistributed.Services.Statistics;
+using UserDistributed.Services.UserProcessing;
 
-namespace GeekMeet.Interfaces;
+namespace UserDistributed.Interfaces;
 
 public interface IUserParallelService
 {
@@ -11,4 +11,4 @@ public interface IUserParallelService
     CityStatisticsService CityStatsService { get; }
     UserSearchService SearchService { get; }
     UserMetricsService MetricsService { get; }
-} 
+}

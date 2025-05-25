@@ -10,8 +10,8 @@ terraform {
 provider "docker" {}
 
 # Create a network for our services
-resource "docker_network" "geekmeet_network" {
-  name = "geekmeet_network"
+resource "docker_network" "UserDistributed_network" {
+  name = "UserDistributed_network"
 }
 
 # Create Redis container
@@ -23,7 +23,7 @@ resource "docker_container" "redis" {
     external = 6379
   }
   networks_advanced {
-    name = docker_network.geekmeet_network.name
+    name = docker_network.UserDistributed_network.name
   }
 }
 
@@ -44,7 +44,7 @@ resource "docker_container" "sqlserver" {
     external = 1433
   }
   networks_advanced {
-    name = docker_network.geekmeet_network.name
+    name = docker_network.UserDistributed_network.name
   }
 }
 
@@ -54,11 +54,11 @@ resource "docker_image" "sqlserver" {
 
 # Create API container
 resource "docker_container" "api" {
-  name  = "geekmeet-api"
+  name  = "UserDistributed-api"
   image = docker_image.api.image_id
   env = [
     "ASPNETCORE_ENVIRONMENT=Development",
-    "ConnectionStrings__DefaultConnection=Server=sqlserver;Database=GeekMeet;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True",
+    "ConnectionStrings__DefaultConnection=Server=sqlserver;Database=UserDistributed;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True",
     "ConnectionStrings__Redis=redis:6379"
   ]
   ports {
@@ -66,7 +66,7 @@ resource "docker_container" "api" {
     external = 8080
   }
   networks_advanced {
-    name = docker_network.geekmeet_network.name
+    name = docker_network.UserDistributed_network.name
   }
   depends_on = [
     docker_container.redis,
@@ -75,7 +75,7 @@ resource "docker_container" "api" {
 }
 
 resource "docker_image" "api" {
-  name = "geekmeet-api:latest"
+  name = "UserDistributed-api:latest"
   build {
     context = ".."
     dockerfile = "Dockerfile"

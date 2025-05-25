@@ -1,4 +1,4 @@
-namespace GeekMeet.DTOs;
+namespace UserDistributed.DTOs;
 
 public record UserSearchDto(
     string Name = "",
@@ -11,4 +11,4 @@ public record UserSearchDto(
     string? ZipCode = null,
     DateTime? CreatedAfter = null,
     DateTime? CreatedBefore = null
-); 
+);

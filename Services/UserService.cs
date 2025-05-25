@@ -1,9 +1,9 @@
 using AutoMapper;
-using GeekMeet.DTOs;
-using GeekMeet.Interfaces;
-using GeekMeet.Models;
+using UserDistributed.DTOs;
+using UserDistributed.Interfaces;
+using UserDistributed.Models;
 
-namespace GeekMeet.Services;
+namespace UserDistributed.Services;
 
 public class UserService(
     IUserRepository userRepository,
@@ -118,4 +118,4 @@ public class UserService(
             throw;
         }
     }
-} 
+}
