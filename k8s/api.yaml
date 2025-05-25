@@ -14,37 +14,37 @@ spec:
         app: userdistributed-api
     spec:
       containers:
-      - name: userdistributed-api
-        image: userdistributed-api:latest
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 80
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Production"
-        - name: ConnectionStrings__DefaultConnection
-          value: "Server=sqlserver;Database=UserDistributed;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
-        - name: ConnectionStrings__Redis
-          value: "redis:6379"
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 80
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 80
-          initialDelaySeconds: 15
-          periodSeconds: 20
+        - name: userdistributed-api
+          image: userdistributed-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=sqlserver;Database=UserDistributed;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+            - name: ConnectionStrings__Redis
+              value: "redis:6379"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
@@ -55,6 +55,6 @@ spec:
   selector:
     app: userdistributed-api
   ports:
-  - port: 80
-    targetPort: 80
-  type: LoadBalancer 
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer

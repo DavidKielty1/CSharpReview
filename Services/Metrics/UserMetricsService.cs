@@ -19,17 +19,21 @@ public class UserMetricsService(
 
     public async Task<Dictionary<string, UserMetrics>> CalculateMetricsAsync()
     {
+        logger.LogInformation("Starting metrics calculation");
         var cacheKey = RedisCacheKeys.UserMetricsCache;
 
         // Try to get from Redis cache first
         var cachedMetrics = await redisService.GetAsync<Dictionary<string, UserMetrics>>(cacheKey);
         if (cachedMetrics != null)
         {
-            logger.LogInformation("Cache hit for key: {Key}", cacheKey);
+            logger.LogInformation("Cache hit for key: {Key}, returning {Count} metrics", cacheKey, cachedMetrics.Count);
             return cachedMetrics;
         }
 
+        logger.LogInformation("Cache miss for key: {Key}, calculating metrics", cacheKey);
         var users = await userRepository.GetAllAsync();
+        logger.LogInformation("Retrieved {Count} users for metrics calculation", users.Count());
+
         var metrics = new ConcurrentDictionary<string, UserMetrics>();
 
         // Using Parallel.ForEach with concurrent dictionary
@@ -38,15 +42,19 @@ public class UserMetricsService(
             await _semaphore.WaitAsync();
             try
             {
+                logger.LogDebug("Processing metrics for user {UserId}", user.Id);
+
                 // Check if metrics are already calculated for this user
                 var userMetricsKey = RedisCacheKeys.UserMetrics(user.Id);
                 var cachedUserMetrics = await redisService.GetAsync<UserMetrics>(userMetricsKey);
                 if (cachedUserMetrics != null)
                 {
+                    logger.LogDebug("Cache hit for user {UserId}", user.Id);
                     metrics.TryAdd($"user_{user.Id}", cachedUserMetrics);
                     return;
                 }
 
+                logger.LogDebug("Calculating metrics for user {UserId}", user.Id);
                 // Simulate some complex calculations
                 await Task.Delay(50);
 
@@ -60,11 +68,18 @@ public class UserMetricsService(
                     CalculatedAt = DateTime.UtcNow
                 };
 
+                logger.LogDebug("Calculated metrics for user {UserId}: ActivityScore={ActivityScore}, EngagementRate={EngagementRate}, PerformanceIndex={PerformanceIndex}",
+                    user.Id, userMetrics.ActivityScore, userMetrics.EngagementRate, userMetrics.PerformanceIndex);
+
                 // Cache individual user metrics
                 await redisService.SetAsync(userMetricsKey, userMetrics, TimeSpan.FromHours(1));
 
                 // Add to the main metrics dictionary
                 metrics.TryAdd($"user_{user.Id}", userMetrics);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error calculating metrics for user {UserId}", user.Id);
             }
             finally
             {
@@ -76,7 +91,7 @@ public class UserMetricsService(
 
         // Cache the complete metrics
         await redisService.SetAsync(cacheKey, result, TimeSpan.FromHours(1));
-        logger.LogInformation("Cached metrics for key: {Key}", cacheKey);
+        logger.LogInformation("Completed metrics calculation. Cached {Count} metrics for key: {Key}", result.Count, cacheKey);
 
         return result;
     }

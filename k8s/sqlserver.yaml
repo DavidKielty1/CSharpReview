@@ -14,25 +14,25 @@ spec:
         app: sqlserver
     spec:
       containers:
-      - name: sqlserver
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        ports:
-        - containerPort: 1433
-        env:
-        - name: ACCEPT_EULA
-          value: "Y"
-        - name: SA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: sqlserver-secret
-              key: SA_PASSWORD
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "500m"
-          limits:
-            memory: "4Gi"
-            cpu: "1000m"
+        - name: sqlserver
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          ports:
+            - containerPort: 1433
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sqlserver-secret
+                  key: SA_PASSWORD
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+            limits:
+              memory: "4Gi"
+              cpu: "1000m"
 ---
 apiVersion: v1
 kind: Service
@@ -43,8 +43,8 @@ spec:
   selector:
     app: sqlserver
   ports:
-  - port: 1433
-    targetPort: 1433
+    - port: 1433
+      targetPort: 1433
   type: ClusterIP
 ---
 apiVersion: v1
@@ -54,4 +54,4 @@ metadata:
   namespace: userdistributed
 type: Opaque
 data:
-  SA_PASSWORD: WW91clN0cm9uZyFQYXNzdzByZA== # Base64 encoded "YourStrong!Passw0rd" 
+  SA_PASSWORD: WW91clN0cm9uZyFQYXNzdzByZA== # Base64 encoded "YourStrong!Passw0rd"

@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cleanup-database
+  namespace: userdistributed
+spec:
+  template:
+    spec:
+      containers:
+        - name: sqlcmd
+          image: mcr.microsoft.com/mssql-tools
+          command: ["/opt/mssql-tools/bin/sqlcmd"]
+          args:
+            [
+              "-S",
+              "sqlserver",
+              "-U",
+              "sa",
+              "-P",
+              "YourStrong!Passw0rd",
+              "-Q",
+              "ALTER DATABASE [UserDistributed] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [UserDistributed];",
+            ]
+      restartPolicy: Never
+  backoffLimit: 1

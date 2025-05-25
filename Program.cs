@@ -10,12 +10,10 @@ using UserDistributed.Services.Search;
 using UserDistributed.Services.Statistics;
 using UserDistributed.Services.UserProcessing;
 using UserDistributed.Services.Cache;
-using UserDistributed.Services.Search;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
