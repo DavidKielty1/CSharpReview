@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using UserDistributed.DTOs;
 using UserDistributed.Interfaces;
-using UserDistributed.Models;
-using Microsoft.AspNetCore.Routing;
 
 namespace UserDistributed.Controllers;
 
