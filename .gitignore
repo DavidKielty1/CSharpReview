@@ -44,5 +44,5 @@ crash.log
 # Rider/JetBrains
 .idea/
 
-# Ignore selfreadme.md if you want
+# Ignore selfreadme.md 
 selfreadme.md

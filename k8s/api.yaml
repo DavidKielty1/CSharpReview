@@ -28,6 +28,14 @@ spec:
               value: "redis:6379"
             - name: ASPNETCORE_URLS
               value: "http://+:8080"
+            - name: Logging__LogLevel__Default
+              value: "Information"
+            - name: Logging__LogLevel__Microsoft
+              value: "Warning"
+            - name: Logging__LogLevel__Microsoft.Hosting.Lifetime
+              value: "Information"
+            - name: Logging__Console__FormatterName
+              value: "json"
           resources:
             requests:
               memory: "256Mi"
