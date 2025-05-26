@@ -45,4 +45,4 @@ crash.log
 .idea/
 
 # Ignore selfreadme.md 
-selfreadme.md
+docs/selfreadme.md
