@@ -21,5 +21,5 @@ kubectl logs -f <userdistributed-api-pods> -n userdistributed
 
 ## Load testing kub
 
-hey -n 100 -c 10 http://localhost:8080/api/userparallel/metrics
+hey -z 2m -c 20 http://localhost:8080/api/userparallel/metrics
 beaverhall

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UserDistributed.Controllers;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UserParallelController(

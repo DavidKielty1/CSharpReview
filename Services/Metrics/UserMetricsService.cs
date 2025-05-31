@@ -93,6 +93,12 @@ public class UserMetricsService(
         await redisService.SetAsync(cacheKey, result, TimeSpan.FromHours(1));
         logger.LogInformation("Completed metrics calculation. Cached {Count} metrics for key: {Key}", result.Count, cacheKey);
 
+        double cpuBurn = 0;
+        for (int i = 0; i < 100_000_000; i++)
+        {
+            cpuBurn += Math.Sqrt(i);
+        }
+
         return result;
     }
 }
