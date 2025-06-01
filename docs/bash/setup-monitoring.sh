@@ -2,24 +2,25 @@
 
 set -e
 
-echo "1. Installing Prometheus stack with custom Grafana configuration..."
-helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
-    --namespace monitoring --create-namespace \
-    --set prometheus.prometheusSpec.maximumStartupDurationSeconds=600 \
-    --set grafana.adminPassword=Demonadmo123! \
-    --set grafana.persistence.enabled=true \
-    --set grafana.persistence.size=10Gi \
-    --set grafana.service.type=ClusterIP \
-    --set grafana.service.port=80 \
-    --set grafana.service.targetPort=3000 \
-    --set grafana.env.GF_AUTH_ANONYMOUS_ENABLED=true \
-    --set grafana.env.GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer \
-    --set grafana.env.GF_SECURITY_ALLOW_EMBEDDING=true \
-    --set-file 'grafana\\.datasources\\.yaml=../../Infra/monitoring/datasources.yaml' \
-    --set-file 'grafana\\.dashboards\\.default\\.api-scaling\\.json=../../Infra/monitoring/api-dashboard.json'
+echo "Checking monitoring setup..."
+if ! kubectl get namespace monitoring-new &>/dev/null; then
+    echo "Monitoring namespace not found. Please run setup-monitoring-initial.sh first."
+    exit 1
+fi
 
-echo "Monitoring setup complete!"
+echo "Checking Prometheus..."
+if ! kubectl get deployment prometheus -n monitoring-new &>/dev/null; then
+    echo "Prometheus not found. Please run setup-monitoring-initial.sh first."
+    exit 1
+fi
+
+echo "Checking Grafana..."
+if ! kubectl get deployment grafana -n monitoring-new &>/dev/null; then
+    echo "Grafana not found. Please run setup-monitoring-initial.sh first."
+    exit 1
+fi
+
+echo "Monitoring stack is ready!"
 echo -e "\nTo access the monitoring tools, run these commands in separate terminals:"
-echo "Grafana:            kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80"
-echo "Loki:               kubectl port-forward -n monitoring svc/prometheus-loki 3100:3100"
-echo "Prometheus:         kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090" 
+echo "Grafana:            kubectl port-forward -n monitoring-new svc/grafana 3000:3000"
+echo "Prometheus:         kubectl port-forward -n monitoring-new svc/prometheus 9090:9090" 
